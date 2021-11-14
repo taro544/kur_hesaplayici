@@ -3,8 +3,6 @@ from bs4 import BeautifulSoup
 import urllib.request
 import os
 import time
-##########  secimlerdeki bos alanlari harf saymasini coz ###################
-
 api_key = '4UDXO21HX6QAZ911'
 def cls():
     os.system('cls' if os.name=='nt' else 'clear')
@@ -37,9 +35,6 @@ def oran_hesaplama(url,sayi1buyuk,sayi2buyuk):
     Degisim = new_string4[Exchange2].replace("Exchange","Oran")
     Oran1 = float(new_string4[Oran])
     return Oran1
-#ana secimden gelen veriye gore fonksiyon degiscek
-# parite ogrenme 2 tane para birimi secicek
-#alim yapma 1 para birimi + para miktari ogrencek
 currency1 = ["TRY","USD","EUR","GBP","JPY","DKK","RUB","BTC"]#sayi1
 currency2 = ["TRY","USD","EUR","GBP","JPY","DKK","RUB"]
 
