@@ -10,7 +10,7 @@ def cls():
 
 
 api_key = '4UDXO21HX6QAZ911'
-# hi taro
+
 while True:
     print("""Parite Ogrenme => 1 \n Alim yapma => 2 \n Satim yapma => 3 """)
     mainquery = input("Hangi islemi yapmak istiyorsunuz ? ")
