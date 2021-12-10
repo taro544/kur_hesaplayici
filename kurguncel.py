@@ -3,154 +3,162 @@ from bs4 import BeautifulSoup
 import urllib.request
 import os
 import time
+
+#Degiskenler 
 api_key = '4UDXO21HX6QAZ911'
-def cls():
-    os.system('cls' if os.name=='nt' else 'clear')
-
-def oran_hesaplama(url,sayi1buyuk,sayi2buyuk):
-
-    my_request = urllib.request.urlopen(url)
-    my_HTML = my_request.read().decode("utf8")
-    #HTML verisini parse etme
-    soup = BeautifulSoup(my_HTML, 'html.parser')
-    x = soup.get_text()
-    old_string = x
-    new_string = old_string.replace('{',' ')
-    new_string1 = new_string.replace('}',' ')
-    new_string2 = new_string1.replace('"',' ')
-    new_string3 = new_string2.replace(',',' ')
-    new_string4 = new_string3.split()
-    Exchange1 =  new_string4.index("Exchange")
-    Rate1 =  new_string4.index("Rate")
-    del new_string4[Exchange1]
-    From_Currency =  new_string4.index("From_Currency")
-    To_Currency = new_string4.index("To_Currency")
-    Parabirimi = new_string4.index("{para}".format(para = sayi1buyuk))
-    Parabirimi1 = new_string4.index("{para}".format(para = sayi2buyuk))
-    Replace_From_Currency = new_string4[From_Currency].replace("From_Currency","1. Para Birimi")
-    Replace_To_Currency = new_string4[To_Currency].replace("To_Currency","2. Para Birimi")
-    Exchange2 =  new_string4.index("Exchange")
-    Rate2 =  new_string4.index("Rate")
-    Oran = Exchange2 + 3 #para biriminin oldugu yer
-    Degisim = new_string4[Exchange2].replace("Exchange","Oran")
-    Oran1 = float(new_string4[Oran])
-    return Oran1
-currency1 = ["TRY","USD","EUR","GBP","JPY","DKK","RUB","BTC"]#sayi1
+sayilar = ["1","2","3"]
+currency1 = ["TRY","USD","EUR","GBP","JPY","DKK","RUB","BTC"]
 currency2 = ["TRY","USD","EUR","GBP","JPY","DKK","RUB"]
 
 
+#Ekrani temizler 
+def cls():
+    os.system('cls' if os.name=='nt' else 'clear')
 
-while True:
-    print("""Parite Ogrenme => 1 \nAlim yapma => 2 \nSatim yapma => 3 """)
-    mainquery = input("Hangi islemi yapmak istiyorsunuz ? ")
-    if mainquery == "1":
-
-        while True:
-            cls()
-            print("""Tl => TRY\nDolar => USD\nEuro => EUR\nPound => GBP\nJapon Yeni => JPY\nDanimarka Kronu => DKK\nRuble => RUB\nBitcoin => BTC""")
-            sayi1 = input('1. Para Birimini Giriniz :')
-            sayi1buyuk = sayi1.upper()
-            if sayi1buyuk in currency1:
-                cls()    
-                while True:
-                    print("""Tl => TRY\nDolar => USD\nEuro => EUR\nPound => GBP\nJapon Yeni => JPY\nDanimarka Kronu => DKK\nRuble => RUB""")
-                    sayi2 = input('2. Para Birimini Giriniz :')
-                    sayi2buyuk = sayi2.upper()
-                    if sayi2buyuk in currency2:
-                        url = 'https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency={sayi1}&to_currency={sayi2}&apikey={api_key}'.format(sayi1 = sayi1buyuk,sayi2 = sayi2buyuk,api_key = api_key)
-                        x = oran_hesaplama(url,sayi1buyuk,sayi2buyuk)
-                        cls()
-                        print("1 " + str(sayi1buyuk) + " = " + str(float(f'{x:.3f}')) + sayi2buyuk)
-                        
-                        break    
-                    else:
-                        cls()
-                        print("Lutfen 2. para birimini dogru girin")    
-                        time.sleep(1)
-                        cls()
-                        continue
-                break
-
-            else:
-                cls()
-                print("Lutfen para birimini dogru girin")    
-                time.sleep(1)
-                cls()
-                continue
-        break                                   
-    elif mainquery == "2":
-        while True:
-            cls()
-            print("""Tl => TRY\nDolar => USD\nEuro => EUR\nPound => GBP\nJapon Yeni => JPY\nDanimarka Kronu => DKK\nRuble => RUB\nBitcoin => BTC""")
-            birim2 = input('Alinacak para birimini seciniz:')
-            birim2buyuk = birim2.upper()
-            if birim2buyuk in currency1:
-                cls()    
-                while True:
-                    sayi2 = input('Alinacak ' + birim2buyuk +" miktarini giriniz:" )
-                    if sayi2.isdigit():
-                        sayi1buyuk = "TRY"
-                        url = 'https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency={sayi1}&to_currency={sayi2}&apikey={api_key}'.format(sayi1 = birim2buyuk,sayi2 = sayi1buyuk,api_key = api_key)
-                        x = oran_hesaplama(url,sayi1buyuk,birim2buyuk)
-                        tldegeri = x*int(sayi2)
-                        cls()
-                        print(sayi2 + " " + str(birim2buyuk) + " almak icin gereken miktar " + str(float(f'{tldegeri:.3f}')) + " TL")
-                        
-                        break    
-                    else:
-                        cls()
-                        print("Lutfen sayi girin")    
-                        time.sleep(1)
-                        cls()
-                        continue
-                break
-
-            else:
-                cls()
-                print("Lutfen para birimini dogru girin")    
-                time.sleep(1)
-                cls()
-                continue
-        break
-    elif mainquery == "3":
-        while True:
-            cls()
-            print("""Tl => TRY\nDolar => USD\nEuro => EUR\nPound => GBP\nJapon Yeni => JPY\nDanimarka Kronu => DKK\nRuble => RUB\nBitcoin => BTC""")
-            birim2 = input('Satilacak para birimini seciniz:')
-            birim2buyuk = birim2.upper()
-            if birim2buyuk in currency1:
-                cls()    
-                while True:
-                    sayi2 = input('Satilacak ' + birim2buyuk +" miktarini giriniz:" )
-                    if sayi2.isdigit():
-                        sayi1buyuk = "TRY"
-                        url = 'https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency={sayi1}&to_currency={sayi2}&apikey={api_key}'.format(sayi1 = birim2buyuk,sayi2 = sayi1buyuk,api_key = api_key)
-                        x = oran_hesaplama(url,sayi1buyuk,birim2buyuk)
-                        tldegeri = x*int(sayi2)
-                        cls()
-                        print(sayi2 + " " + str(birim2buyuk) + " satinca eline gececek miktar " + str(float(f'{tldegeri:.3f}')) + " TL")
-                        break    
-                    else:
-                        cls()
-                        print("Lutfen sayi girin")    
-                        time.sleep(1)
-                        cls()
-                        continue
-                break
-            else:
-                cls()
-                print("Lutfen para birimini dogru girin")    
-                time.sleep(1)
-                cls()
-                continue    
-    
-
-
-
-        break        
+def oran_hesaplama(url):
+    my_request = urllib.request.urlopen(url)
+    my_HTML = my_request.read().decode("utf8")
+    soup = BeautifulSoup(my_HTML, 'html.parser')
+    x = soup.get_text()
+    new_string = x.replace('"',' ')
+    new_string1 = new_string.split()
+    if "Exchange" in new_string1:
+        Exchange1 =  new_string1.index("Exchange")
+        del new_string1[Exchange1]
+        Exchange2 =  new_string1.index("Exchange")
+        Oran = new_string1[Exchange2+3]
+        return Oran
     else:
+        return 0
+ 
+def islem_sorgu():
+    while True:
+        print("""Parite Ogrenme => 1 \nAlim yapma => 2 \nSatim yapma => 3 """)
+        mainquery = input("Hangi islemi yapmak istiyorsunuz ? ")
+        if mainquery in sayilar:
+            return int(mainquery)
+            cls()
+            break
+        else:
+            cls()
+            print("Girdiginiz deger yanlis !!")
+            time.sleep(2)
+            cls()
+            continue
+     
+def parite_ogrenme1():
+    while True:
         cls()
-        print("lutfen gecerli islemi giriniz ")
-        time.sleep(1)
+        print("""Tl => TRY\nDolar => USD\nEuro => EUR\nPound => GBP\nJapon Yeni => JPY\nDanimarka Kronu => DKK\nRuble => RUB\nBitcoin => BTC""")
+        sayi1 = input('1. Para Birimini Giriniz :')
+        if sayi1.upper() in currency2:
+            cls()
+            return sayi1.upper()
+            break
+        else:
+            cls()
+            print("Girdiginiz deger yanlis !!")
+            time.sleep(2)
+            cls()
+            continue
+ 
+def parite_ogrenme2():
+    while True:
         cls()
-        continue
+        print("""Tl => TRY\nDolar => USD\nEuro => EUR\nPound => GBP\nJapon Yeni => JPY\nDanimarka Kronu => DKK\nRuble => RUB""")
+        sayi2 = input('2. Para Birimini Giriniz :')
+        if sayi2.upper() in currency2:
+            cls()
+            return sayi2.upper()
+            break
+        else:
+            cls()
+            print("Girdiginiz deger yanlis !!")
+            time.sleep(2)
+            cls()
+            continue
+
+def alim_1():    
+    while True:
+        print("""Tl => TRY\nDolar => USD\nEuro => EUR\nPound => GBP\nJapon Yeni => JPY\nDanimarka Kronu => DKK\nRuble => RUB\nBitcoin => BTC""")
+        birim2 = input('Alinacak para birimini seciniz:')
+        if birim2.upper() in currency1:
+            return birim2.upper()
+            cls()
+            break
+        else:
+            cls()
+            print("Girdiginiz deger yanlis !!")
+            time.sleep(2)
+            cls()
+            continue
+
+def alim_2():
+    while True:
+        cls()
+        sayi2 = input('Alinacak ' + str(alim_1) +" miktarini giriniz:" )
+        if sayi2.isdigit():
+            return sayi2
+        else:
+            print("Girdiginiz deger yanlis !!")
+            time.sleep(2)
+            cls()
+            continue
+
+def satim1():
+    while True:
+        cls()
+        print("""Tl => TRY\nDolar => USD\nEuro => EUR\nPound => GBP\nJapon Yeni => JPY\nDanimarka Kronu => DKK\nRuble => RUB\nBitcoin => BTC""")
+        birim1=input("Satilacak para birimini secin :")
+        if birim1.upper() in currency1:
+            return birim1.upper()
+            cls()
+            break
+        else:
+            cls()
+            print("Girdiginiz deger yanlis !!")
+            time.sleep(2)
+            continue
+
+def satim2():
+    while True:
+        cls()
+        Miktar = input('Satilacak ' + str(satim_1) +" miktarini giriniz:")
+        if Miktar.isdigit():
+            return Miktar
+            break
+        else:
+            cls()
+            print("Girdiginiz deger yanlis !!")
+            time.sleep(2)
+            cls()
+            continue
+
+cls()
+islem_sorgu_sonuc = islem_sorgu()
+ 
+if islem_sorgu_sonuc == 1:
+    cls()
+    para_birimi_1 = parite_ogrenme1()
+    para_birimi_2 = parite_ogrenme2()
+    url = 'https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency={sayi1}&to_currency={sayi2}&apikey={api_key}'.format(sayi1 = para_birimi_1,sayi2 = para_birimi_2,api_key = api_key)
+    islem_sorgu_sonuc_parite=oran_hesaplama(url)
+    print("Bir " + para_birimi_1 +" "+ islem_sorgu_sonuc_parite +" "+ para_birimi_2) 
+
+elif islem_sorgu_sonuc == 2:
+    cls()
+    alim_1 = alim_1()
+    alim_2 = alim_2()
+    url = 'https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency={sayi1}&to_currency={sayi2}&apikey={api_key}'.format(sayi1 = str(alim_1).upper(),sayi2 = "TRY",api_key = api_key)
+    islem_sorgu_sonuc_alim=oran_hesaplama(url)
+    alim_oran =float(str(alim_2))*float(islem_sorgu_sonuc_alim)
+    print(str(alim_2) + " Tane " + str(alim_1) + " Almak icin gereken miktar " + str(alim_oran) + " TRY")
+
+elif islem_sorgu_sonuc == 3:
+    cls()
+    satim_1 = satim1()
+    satim_2 = satim2()
+    url = 'https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency={sayi1}&to_currency={sayi2}&apikey={api_key}'.format(sayi1 = satim_1.upper(),sayi2 = "TRY",api_key = api_key)
+    islem_sorgu_sonuc_satim = oran_hesaplama(url)
+    satim_Oran = float(islem_sorgu_sonuc_satim)*float(satim_2)
+    print("1 " + satim_1 + " Satinca eline gececek para " + str(satim_Oran) + " TRY")
